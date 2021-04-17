@@ -1,0 +1,38 @@
+<style>
+    h1 {
+        font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    }
+    h2 {
+        font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+        font-size : 15px;
+    }
+</style>
+
+<div><h1>People Search!</h1></div>
+
+{% if messages %} 
+{% for message in messages %}
+    {{ message }}
+{% endfor %}
+{% endif %}
+
+<form action="" method="post" >
+    {% csrf_token %}
+    {{ form }}
+ <input type="submit" name="namesubmit" value="Search">
+</form>
+
+<form action="" method="post" >
+    {% csrf_token %}
+    {{ emailform }}
+ <input type="submit" name="emailsubmit" value="Search">
+</form>
+
+<h3>Person List</h3>
+
+{% if peoples %}
+{% for people in peoples %}
+    <b>Name</b>: {{ people.name }} <b>Email</b>: {{ people.email}}
+    <br>
+{% endfor %}
+{% endif %}

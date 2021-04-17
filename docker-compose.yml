@@ -1,0 +1,48 @@
+version: "3.9"
+   
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  migration:
+    build: ./DJApp
+    command: python manage.py migrate
+    restart: on-failure
+    volumes:
+      - ./DJApp:/app/DJApp
+    links:
+      - db
+    depends_on:
+      - db       
+  web:
+    build: ./DJApp
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: on-failure
+    volumes:
+      - ./DJApp:/app/DJApp
+    ports:
+      - "8000:8000"
+    depends_on:
+      - migration
+  frontend:
+    build: ./JSApp
+    volumes:
+      - './:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm start
+    depends_on:
+      - web
+  
+
+ 
+    
